@@ -1,5 +1,6 @@
 import type React from 'react';
 import { createContext, useContext, useState } from 'react';
+import { sepolia } from 'viem/chains';
 
 export enum FilterOption {
   Highest = 'Highest',
@@ -18,6 +19,7 @@ export type Grant = {
   claimed: number;
   grantAmount: number;
   canClaim: boolean;
+  chainId: number;
 };
 
 type GrantsContextType = {
@@ -46,6 +48,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       id: 'e23db1a6-3a9b-48bf-8a06-bb39c2298435',
       title: 'Demo Grant',
       description: 'Claim your PLBR here',
+      chainId: sepolia.id,
       date: new Date('2024-10-01'),
       delegateTo: '0x01',
       latestClaim: '0x00',
@@ -58,6 +61,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       title: 'Party Protocol',
       description:
         'The Party Protocol is an open-source protocol for group coordination. It provides flexible and powerful primitives for creating a shared smart contract account governed by a group of people, big or small. Party.app is the flagship UI / app built on top. It allows groups to form a small group wallet, and large on-chain DAO, or anything in-between. Party.app has built-in functionality for crowdfunding, governance, using apps via wallet connect, buying & selling NFTs, trading tokens, chatting, and much more.',
+      chainId: sepolia.id,
       date: new Date('2024-10-01'),
       delegateTo: '0x01',
       latestClaim: '0x00',
@@ -71,6 +75,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       description:
         'The Optimism Collective is a large-scale experiment in digital democratic governance, built to drive rapid and sustainable growth of the Optimism ecosystem.',
       date: new Date('2024-09-15'),
+      chainId: sepolia.id,
       delegateTo: '0x02',
       latestClaim: '0x01',
       claimed: 75000.0,
@@ -83,6 +88,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       description:
         'Velodrome is a next-generation AMM built on the Optimism network, designed to maximize capital efficiency and provide sustainable rewards for liquidity providers.',
       date: new Date('2024-11-30'),
+      chainId: sepolia.id,
       delegateTo: '0x03',
       latestClaim: '0x02',
       claimed: 50000.0,
@@ -95,6 +101,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       description:
         'Synthetix is a decentralized platform on Ethereum for creating and trading synthetic assets. It allows users to gain exposure to a wide range of assets without directly holding them.',
       date: new Date('2024-08-20'),
+      chainId: sepolia.id,
       delegateTo: '0x04',
       latestClaim: '0x03',
       claimed: 180000.0,
@@ -107,6 +114,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       description:
         'Perpetual Protocol is a decentralized perpetual contract trading protocol for every asset, empowering traders, liquidity providers & developers to participate in an open financial market with no barriers to entry.',
       date: new Date('2024-12-10'),
+      chainId: sepolia.id,
       delegateTo: '0x05',
       latestClaim: '0x04',
       claimed: 90000.0,
@@ -119,6 +127,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       description:
         'Lyra is an options trading protocol built on Ethereum L2s. It provides a decentralized options trading platform with competitive pricing and deep liquidity.',
       date: new Date('2025-01-15'),
+      chainId: sepolia.id,
       delegateTo: '0x06',
       latestClaim: '0x05',
       claimed: 120000.0,
@@ -131,6 +140,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       description:
         'Polynomial is a decentralized options and structured products protocol, enabling users to create, trade, and manage complex financial instruments on-chain.',
       date: new Date('2024-07-01'),
+      chainId: sepolia.id,
       delegateTo: '0x07',
       latestClaim: '0x06',
       claimed: 80000.0,
@@ -143,6 +153,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       description:
         'A smart contract system that automatically maximizes yields across various DeFi protocols.',
       date: new Date('2025-02-20'),
+      chainId: sepolia.id,
       delegateTo: '0x08',
       latestClaim: '0x07',
       claimed: 95000.0,
@@ -155,6 +166,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       description:
         'A decentralized platform for tracking DeFi metrics and providing insights.',
       date: new Date('2025-03-01'),
+      chainId: sepolia.id,
       delegateTo: '0x09',
       latestClaim: '0x08',
       claimed: 70000.0,
@@ -167,6 +179,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       description:
         'A decentralized platform for monitoring DeFi protocol security and providing alerts.',
       date: new Date('2025-04-10'),
+      chainId: sepolia.id,
       delegateTo: '0x10',
       latestClaim: '0x09',
       claimed: 60000.0,
@@ -179,6 +192,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       description:
         'A decentralized platform for providing DeFi protocol analytics and insights.',
       date: new Date('2025-05-20'),
+      chainId: sepolia.id,
       delegateTo: '0x11',
       latestClaim: '0x10',
       claimed: 50000.0,
@@ -191,6 +205,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       description:
         'A decentralized platform for facilitating DeFi protocol governance and decision-making.',
       date: new Date('2025-06-01'),
+      chainId: sepolia.id,
       delegateTo: '0x12',
       latestClaim: '0x11',
       claimed: 40000.0,
@@ -203,6 +218,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       description:
         'A decentralized platform for providing DeFi protocol security and risk management.',
       date: new Date('2025-07-10'),
+      chainId: sepolia.id,
       delegateTo: '0x13',
       latestClaim: '0x12',
       claimed: 30000.0,
@@ -215,6 +231,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       description:
         'A decentralized platform for fostering DeFi protocol innovation and development.',
       date: new Date('2025-08-20'),
+      chainId: sepolia.id,
       delegateTo: '0x14',
       latestClaim: '0x13',
       claimed: 20000.0,
@@ -227,6 +244,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       description:
         'A decentralized platform for providing DeFi protocol education and training.',
       date: new Date('2025-09-01'),
+      chainId: sepolia.id,
       delegateTo: '0x15',
       latestClaim: '0x14',
       claimed: 10000.0,

@@ -31,6 +31,11 @@ const getRpcUrlForChain = (chainId: number) => {
   }
 };
 
+export const generateBlockExplorerUrl = (chainId: number, hash: string) => {
+  const chain = getChainForChainId(chainId);
+  return `${chain.blockExplorers.default.url}/tx/${hash}`;
+};
+
 export const getPublicClientForChain = (chainId: number) => {
   const chain = getChainForChainId(chainId);
   const rpcUrl = getRpcUrlForChain(chainId);
