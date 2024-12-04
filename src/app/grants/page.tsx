@@ -23,7 +23,7 @@ const Grants = () => {
   const [filter, setFilter] = useState<FilterOption>(FilterOption.Highest);
 
   const claimableGrants = useMemo(() => {
-    return grants.filter((grant) => grant.proof.canClaim);
+    return grants.filter((grant) => grant.currentUserCanClaim);
   }, [grants]);
 
   const claimableGrantIds = claimableGrants.map((grant) => grant.id);

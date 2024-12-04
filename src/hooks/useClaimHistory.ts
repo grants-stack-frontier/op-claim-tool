@@ -51,10 +51,10 @@ export type ClaimHistory = {
   events: ClaimHistoryEvent[];
 };
 
-export const useClaimHistory = (userAddress: string) => {
-  const { grants } = useGrants();
+export const useClaimHistory = (userAddress: string, grantIds: string[]) => {
   return useQuery({
     queryKey: ['claim-history', userAddress],
+    enabled: !!userAddress,
     queryFn: async () => {
       const response = await fetch(hedgeyGraphqlApiEndpoint, {
         method: 'POST',
@@ -93,24 +93,28 @@ export const useClaimHistory = (userAddress: string) => {
             campaignId,
           } as ClaimHistoryEvent;
         })
-        .filter((event) => !!event);
+        .filter((event) => !!event)
+        // Sort in reverse order by timestamp
+        .toSorted((a, b) => b.date.getTime() - a.date.getTime());
 
-      return grants
-        .map((grant) => {
-          const campaignId = grant.id;
-          const events = (allEvents || []).filter(
-            (event) => event.campaignId === campaignId,
+      if (!allEvents) {
+        return {};
+      }
+
+      return grantIds.reduce(
+        (acc, grantId) => {
+          const events = allEvents.filter(
+            (event) => event.campaignId === grantId,
           );
-
           if (events.length === 0) {
-            return null;
+            return acc;
           }
-          return {
-            grant,
-            events,
-          };
-        })
-        .filter((claim) => !!claim);
+
+          acc[grantId] = events;
+          return acc;
+        },
+        {} as Record<string, ClaimHistoryEvent[]>,
+      );
     },
   });
 };

@@ -1,4 +1,8 @@
 import type { Claim, ResponseData } from '@/app/api/claims/route';
+import {
+  type ClaimHistoryEvent,
+  useClaimHistory,
+} from '@/hooks/useClaimHistory';
 import { useGetCanClaim } from '@/hooks/useGetCanClaim';
 import {
   type HedgeyCampaign,
@@ -9,6 +13,7 @@ import type React from 'react';
 import { createContext, useContext, useState } from 'react';
 import { formatUnits } from 'viem';
 import { sepolia } from 'viem/chains';
+import { useAccount } from 'wagmi';
 
 export enum FilterOption {
   Highest = 'Highest',
@@ -23,13 +28,14 @@ export type Grant = {
   description: string;
   date: Date;
   delegateTo: string;
-  latestClaim: string;
+  latestClaimHash: string;
   claimed: number;
   grantAmount: number;
   chainId: number;
   proof: Claim & { claimed: boolean };
   campaign: HedgeyCampaign;
   currentUserCanClaim: boolean;
+  claimEvents: ClaimHistoryEvent[];
 };
 
 type GrantsContextType = {
@@ -59,22 +65,22 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       title: 'Uniswap Demo Grant',
       description: 'Claim your tokens here',
       delegateTo: '0x01',
-      latestClaim: '0x00',
     },
     {
       id: 'e23db1a6-3a9b-48bf-8a06-bb39c2298435',
       title: 'Demo Grant',
       description: 'Claim your PLBR here',
       delegateTo: '0x01',
-      latestClaim: '0x00',
     },
   ];
 
   const [displayCount, setDisplayCount] = useState(10);
 
+  const { address } = useAccount();
   const campaignIds = grants.map((grant) => grant.id);
   const { data: hedgeyCampaigns } = useGetHedgeyCampaigns(campaignIds);
   const { data: proofs } = useGetCanClaim(hedgeyCampaigns ?? []);
+  const { data: claimHistory = {} } = useClaimHistory(address, campaignIds);
 
   // Map the Hedgey campaigns to the grants, ignore any grants that don't have a corresponding campaign
   const mappedGrants = grants
@@ -103,11 +109,15 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       const currentUserCanClaim = proof.canClaim && !proof.claimed;
       const date = new Date(campaign.createdAt as string);
       const chainId = getChainIdByNetworkName(campaign.network);
+      const claimEvents = claimHistory[grant.id];
+
+      const latestClaimHash = claimEvents?.[0]?.transactionHash;
 
       return {
         ...grant,
         proof,
         campaign,
+        claimEvents,
 
         // Calculated fields
         grantAmount,
@@ -115,6 +125,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
         currentUserCanClaim,
         date,
         chainId,
+        latestClaimHash,
       };
     })
     .filter((grant) => grant !== null) as Grant[];

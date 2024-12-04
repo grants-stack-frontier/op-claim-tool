@@ -1,5 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import type { Grant } from '@/context/GrantsContext';
+import { generateBlockExplorerUrl } from '@/lib/getPublicClientForChain';
+import { truncate } from '@/lib/truncate';
 import { cn } from '@/lib/utils';
 import { RiArrowRightUpLine } from '@remixicon/react';
 import { Hexagon } from 'lucide-react';
@@ -79,16 +81,21 @@ const GrantCard = ({
                 <Separator orientation="vertical" />
                 <div className="flex items-center gap-2">
                   <p>Latest claim: </p>
-                  <Link
+                  <a
+                    target="_blank"
                     className="group flex items-center font-semibold text-black"
-                    href="/grants"
+                    href={generateBlockExplorerUrl(
+                      grant.chainId,
+                      grant.latestClaimHash,
+                    )}
+                    rel="noreferrer"
                   >
-                    {grant.latestClaim}{' '}
+                    {truncate(grant.latestClaimHash, 11)}{' '}
                     <RiArrowRightUpLine
                       className="ml-1 text-neutral-500 w-4 h-4 opacity-70 transition-transform duration-300 ease-in-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:opacity-100"
                       aria-hidden="true"
                     />
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>

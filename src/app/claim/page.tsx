@@ -4,25 +4,23 @@ import ProjectCard from '@/components/common/ProjectCard';
 import { TransactionCard } from '@/components/common/TransactionCard';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { useClaimHistory } from '@/hooks/useClaimHistory';
+import { useGrants } from '@/context/GrantsContext';
 import { RiArrowRightUpLine } from '@remixicon/react';
 import { Hexagon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useAccount } from 'wagmi';
 import OPLogo from '../../../public/op.svg';
 import Smile from '../../../public/smile.svg';
 
 const ClaimHistory = () => {
-  const { address } = useAccount();
-  const { data: transactionHistory } = useClaimHistory(address);
+  const { grants } = useGrants();
   return (
     <>
       <div className="flex flex-col gap-6 items-start">
         <h1 className="text-4xl font-bold">Claim History</h1>
         <div className="flex items-start gap-14">
           <div className="space-y-6 grow">
-            {transactionHistory?.map(({ grant, events }) => (
+            {grants?.map(({ claimEvents, ...grant }) => (
               <div key={grant.id}>
                 <div className="flex items-center gap-4 mb-4">
                   <Hexagon className="w-10 h-10" />
@@ -68,7 +66,7 @@ const ClaimHistory = () => {
                   </div>
                 </div>
                 <div className="flex flex-col gap-4">
-                  {events?.length === 0 && (
+                  {claimEvents?.length === 0 && (
                     <Card className="shadow-none border-none">
                       <CardContent className="py-8 px-10 space-y-6 flex flex-col items-center justify-center">
                         <Image
@@ -84,7 +82,7 @@ const ClaimHistory = () => {
                       </CardContent>
                     </Card>
                   )}
-                  {events.map((transaction) => (
+                  {claimEvents.map((transaction) => (
                     <TransactionCard
                       key={transaction.transactionHash}
                       chainId={grant.chainId}
