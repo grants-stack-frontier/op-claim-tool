@@ -34,7 +34,8 @@ const GrantCard = ({
           isClaimDialogOpen && 'border border-neutral-300 cursor-pointer',
         )}
       >
-        {grant.canClaim && !isClaimDialogOpen && isConnected && (
+        {/* TODO: Disable based on chain */}
+        {grant.currentUserCanClaim && !isClaimDialogOpen && isConnected && (
           <div className="flex items-center justify-between bg-red-200 px-10 py-2 rounded-t-lg">
             <p className="text-sm">You are eligible to claim this grant</p>
             <Button

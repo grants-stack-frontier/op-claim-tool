@@ -20,7 +20,7 @@ export function ClaimDialog({
   grantId?: string;
 }) {
   const { grants } = useGrants();
-  const claimableGrants = grants.filter((grant) => grant.canClaim);
+  const claimableGrants = grants.filter((grant) => grant.currentUserCanClaim);
   const [selectedGrantId, setSelectedGrantId] = useState<string | undefined>(
     grantId,
   );
