@@ -8,6 +8,7 @@ import {
   type HedgeyCampaign,
   useGetHedgeyCampaigns,
 } from '@/hooks/useGetHedgeyCampaigns';
+import { getNextTokenReleaseTimestamp } from '@/lib/getNextTokenRelease';
 import { getChainIdByNetworkName } from '@/lib/getPublicClientForChain';
 import type React from 'react';
 import { createContext, useContext, useState } from 'react';
@@ -36,6 +37,7 @@ export type Grant = {
   campaign: HedgeyCampaign;
   currentUserCanClaim: boolean;
   claimEvents: ClaimHistoryEvent[];
+  tokenReleasedInDays: number | null;
 };
 
 type GrantsContextType = {
@@ -113,6 +115,10 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
 
       const latestClaimHash = claimEvents?.[0]?.transactionHash;
 
+      const tokenReleasedInDays = getNextTokenReleaseTimestamp(
+        campaign.claimLockup,
+      );
+
       return {
         ...grant,
         proof,
@@ -126,6 +132,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
         date,
         chainId,
         latestClaimHash,
+        tokenReleasedInDays,
       };
     })
     .filter((grant) => grant !== null) as Grant[];
@@ -133,6 +140,8 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
   const loadMore = () => {
     setDisplayCount((prevCount) => Math.min(prevCount + 5, grants.length));
   };
+
+  console.log(mappedGrants);
 
   return (
     <GrantsContext.Provider

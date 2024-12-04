@@ -65,6 +65,18 @@ const GrantCard = ({
                   </span>
                 </p>
                 <Separator orientation="vertical" />
+                {grant.tokenReleasedInDays && (
+                  <>
+                    <p>
+                      Token released in:{' '}
+                      <span className="font-semibold text-black">
+                        {grant.tokenReleasedInDays}{' '}
+                        {grant.tokenReleasedInDays > 1 ? 'days' : 'day'}
+                      </span>
+                    </p>
+                    <Separator orientation="vertical" />
+                  </>
+                )}
                 <div className="flex items-center gap-2">
                   <p>Delegate to: </p>
                   <Link
