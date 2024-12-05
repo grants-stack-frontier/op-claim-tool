@@ -1,4 +1,4 @@
-import type { Claim, ResponseData } from '@/app/api/claims/route';
+import type { Claim } from '@/app/api/claims/route';
 import {
   type ClaimHistoryEvent,
   useClaimHistory,
@@ -13,7 +13,6 @@ import { getChainIdByNetworkName } from '@/lib/getPublicClientForChain';
 import type React from 'react';
 import { createContext, useContext, useState } from 'react';
 import { formatUnits } from 'viem';
-import { sepolia } from 'viem/chains';
 import { useAccount } from 'wagmi';
 
 export enum FilterOption {
@@ -62,6 +61,12 @@ type GrantsProviderProps = {
 
 export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
   const grants = [
+    {
+      id: '1ab278f1-252a-4265-b15f-30765f46babc',
+      title: 'Optimism Demo Grant',
+      description: 'For the optimism demo',
+      delegateTo: '0x123',
+    },
     {
       id: '04725f67-1af7-4b4c-9b3e-7f523f5e8cf7',
       title: 'Uniswap Demo Grant',

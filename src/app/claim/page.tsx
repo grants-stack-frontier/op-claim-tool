@@ -93,10 +93,6 @@ const ClaimHistory = () => {
                 </div>
               </div>
             </div>
-            <div className="flex-col space-y-2">
-              <ProjectCard grant={grant} />
-              <DaysUntilCard grant={grant} />
-            </div>
           </div>
         ))}
       </div>
