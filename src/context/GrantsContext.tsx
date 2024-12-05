@@ -35,7 +35,7 @@ export type Grant = {
   proof: Claim & { claimed: boolean };
   campaign: HedgeyCampaign;
   currentUserCanClaim: boolean;
-  claimEvents: ClaimHistoryEvent[];
+  claimEvents?: ClaimHistoryEvent[];
   tokenReleasedInDays: number | null;
 };
 

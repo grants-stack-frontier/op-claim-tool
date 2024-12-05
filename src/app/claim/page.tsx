@@ -83,7 +83,7 @@ const ClaimHistory = () => {
                       </CardContent>
                     </Card>
                   )}
-                  {grant.claimEvents.map((transaction) => (
+                  {grant.claimEvents?.map((transaction) => (
                     <TransactionCard
                       key={transaction.transactionHash}
                       chainId={grant.chainId}
