@@ -6,6 +6,7 @@ import type { ComponentProps } from 'react';
 import { useEffect, useState } from 'react';
 import OPLogo from '../../../public/op.svg';
 import ClaimCard from '../common/ClaimCard';
+import { DaysUntilCard } from '../common/DaysUntilCard';
 import GrantsList from '../common/GrantList';
 import InfoCard from '../common/InfoCard';
 import ProjectCard from '../common/ProjectCard';
@@ -68,7 +69,8 @@ export function ClaimDialog({
               <div className="pt-14 flex items-start gap-14">
                 <ClaimCard grant={selectedGrant} />
                 <div className="flex flex-col gap-2">
-                  <ProjectCard title={selectedGrant?.title} />
+                  <ProjectCard grant={selectedGrant} />
+                  <DaysUntilCard grant={selectedGrant} />
                   <InfoCard />
                 </div>
               </div>

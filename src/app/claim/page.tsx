@@ -1,5 +1,6 @@
 'use client';
 
+import { DaysUntilCard } from '@/components/common/DaysUntilCard';
 import ProjectCard from '@/components/common/ProjectCard';
 import { TransactionCard } from '@/components/common/TransactionCard';
 import { Card, CardContent } from '@/components/ui/card';
@@ -18,9 +19,9 @@ const ClaimHistory = () => {
     <>
       <div className="flex flex-col gap-6 items-start">
         <h1 className="text-4xl font-bold">Claim History</h1>
-        <div className="flex items-start gap-14">
-          <div className="space-y-6 grow">
-            {grants?.map(({ claimEvents, ...grant }) => (
+        {grants?.map((grant) => (
+          <div key={grant.id} className="flex items-start gap-14 w-full">
+            <div className="space-y-6 grow">
               <div key={grant.id}>
                 <div className="flex items-center gap-4 mb-4">
                   <Hexagon className="w-10 h-10" />
@@ -66,7 +67,7 @@ const ClaimHistory = () => {
                   </div>
                 </div>
                 <div className="flex flex-col gap-4">
-                  {claimEvents?.length === 0 && (
+                  {grant.claimEvents?.length === 0 && (
                     <Card className="shadow-none border-none">
                       <CardContent className="py-8 px-10 space-y-6 flex flex-col items-center justify-center">
                         <Image
@@ -82,7 +83,7 @@ const ClaimHistory = () => {
                       </CardContent>
                     </Card>
                   )}
-                  {claimEvents.map((transaction) => (
+                  {grant.claimEvents.map((transaction) => (
                     <TransactionCard
                       key={transaction.transactionHash}
                       chainId={grant.chainId}
@@ -91,17 +92,13 @@ const ClaimHistory = () => {
                   ))}
                 </div>
               </div>
-            ))}
+            </div>
+            <div className="flex-col space-y-2">
+              <ProjectCard grant={grant} />
+              <DaysUntilCard grant={grant} />
+            </div>
           </div>
-          <div className="flex-none">
-            <ProjectCard
-              projectCount={1}
-              totalAwarded={30000}
-              remainingAmount={2000}
-              grantIds={['1']}
-            />
-          </div>
-        </div>
+        ))}
       </div>
     </>
   );

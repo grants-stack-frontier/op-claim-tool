@@ -117,7 +117,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
 
       const tokenReleasedInDays = getNextTokenReleaseTimestamp(
         campaign.claimLockup,
-      );
+      )?.daysUntilNextRelease;
 
       return {
         ...grant,
