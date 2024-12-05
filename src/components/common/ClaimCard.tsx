@@ -2,6 +2,7 @@ import type { Grant } from '@/context/GrantsContext';
 import useContractClaimAndDelegate from '@/hooks/useContractClaimAndDelegate';
 import { useGetClaim } from '@/hooks/useGetClaim';
 import { useToast } from '@/hooks/useToast';
+import { generateBlockExplorerUrl } from '@/lib/getPublicClientForChain';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RiArrowRightUpLine } from '@remixicon/react';
 import Link from 'next/link';
@@ -45,7 +46,6 @@ const FormSchema = z
   });
 
 export default function ClaimCard({ grant }: { grant: Grant }) {
-  const [step, setStep] = useState(1);
   const router = useRouter();
   const { toast } = useToast();
   const { claim } = useGetClaim({
@@ -53,6 +53,9 @@ export default function ClaimCard({ grant }: { grant: Grant }) {
   });
   const { mutateAsync: claimAndDelegate, isPending } =
     useContractClaimAndDelegate();
+
+  const [step, setStep] = useState<'form' | 'confirmation'>('form');
+  const [txHash, setTxHash] = useState<string>();
 
   // TODO: Enable ENS
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -75,17 +78,18 @@ export default function ClaimCard({ grant }: { grant: Grant }) {
       return;
     }
     try {
-      await claimAndDelegate({
+      const receipt = await claimAndDelegate({
         delegateeAddress: data.enableDelegate
           ? (data.delegateAddress as `0x${string}`)
           : undefined,
         claim,
       });
+      setTxHash(receipt.transactionHash);
       toast({
         title: 'Success',
         description: 'Rewards claimed successfully',
       });
-      setStep(3);
+      setStep('confirmation');
     } catch (error) {
       // @ts-expect-error this error is spreadable
       console.error('Error claiming rewards:', { ...error });
@@ -108,15 +112,14 @@ export default function ClaimCard({ grant }: { grant: Grant }) {
   }
 
   function handleClose() {
-    console.log('Closing the claim process');
-    router.push('/grants');
+    router.push('/claim');
   }
 
   const enableDelegate = form.watch('enableDelegate');
 
   return (
     <Card className="bg-transparent border border-neutral-300 shadow-none p-10 w-[634px]">
-      {step === 1 ? (
+      {step === 'form' && (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <CardContent className="space-y-6">
@@ -178,25 +181,44 @@ export default function ClaimCard({ grant }: { grant: Grant }) {
               <Button
                 type="submit"
                 variant="destructive"
-                disabled={!form.formState.isValid}
+                disabled={!form.formState.isValid || isPending}
               >
                 {enableDelegate ? 'Delegate' : 'Claim'}
               </Button>
             </CardFooter>
           </form>
         </Form>
-      ) : (
-        <>
-          <CardContent className="p-0 space-y-6 flex flex-col items-center">
-            <p className="text-lg">All done!</p>
-            <SuccessCheckmark />
+      )}
+      {step === 'confirmation' && (
+        <CardContent className="p-0 space-y-6 flex flex-col items-center">
+          <p className="text-lg">All done!</p>
+          <SuccessCheckmark />
+          <div className="flex space-x-2">
             <DialogClose asChild>
-              <Button onClick={handleClose} variant="outline">
-                Close
+              <Button
+                onClick={handleClose}
+                variant="outline"
+                className="w-full"
+              >
+                See my claim history
               </Button>
             </DialogClose>
-          </CardContent>
-        </>
+            {txHash && (
+              <Link
+                target="_blank"
+                href={generateBlockExplorerUrl(grant.chainId, txHash)}
+              >
+                <Button className="w-full group">
+                  View on block explorer{' '}
+                  <RiArrowRightUpLine
+                    className="ml-1 text-white w-4 h-4 transition-transform duration-300 ease-in-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:opacity-100"
+                    aria-hidden="true"
+                  />
+                </Button>
+              </Link>
+            )}
+          </div>
+        </CardContent>
       )}
     </Card>
   );
