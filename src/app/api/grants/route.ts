@@ -1,5 +1,3 @@
-import { FEATURES } from '../../../../config/features';
-
 export const dynamic = 'force-dynamic';
 
 export type GrantClaimRow = {
@@ -10,14 +8,42 @@ export type GrantClaimRow = {
 
 export async function GET() {
   const apiKey = process.env.GOOGLE_SHEETS_API_KEY;
+  const sheetId = process.env.GOOGLE_SHEETS_ID;
+
   if (!apiKey) {
     return Response.json({
       success: false,
       message: 'API key is not set',
     });
   }
+  if (!sheetId) {
+    return Response.json({
+      success: false,
+      message: 'Sheet ID is not set',
+    });
+  }
+
+  // Fetch sheet names
+  const sheetNamesResponse = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?&fields=sheets.properties`,
+    {
+      headers: {
+        'X-goog-api-key': apiKey,
+      },
+    },
+  );
+  const sheetNames = await sheetNamesResponse.json();
+  const title: string = sheetNames?.sheets[0]?.properties?.title;
+
+  if (!title) {
+    return Response.json({
+      success: false,
+      message: 'Sheet title is not set',
+    });
+  }
+
   const response = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${FEATURES.GOOGLE_SHEETS_ID}/values/Sheet1`,
+    `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${title}`,
     {
       headers: {
         'X-goog-api-key': apiKey,
