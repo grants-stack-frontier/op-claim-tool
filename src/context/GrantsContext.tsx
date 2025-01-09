@@ -143,9 +143,12 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
         latestClaimHash,
         tokenReleasedInDays,
         delegateTo: latestDelegateTo,
-      };
+      } as Grant | null;
     })
-    .filter((grant) => grant !== null) as Grant[];
+    .filter((grant) => grant !== null)
+    .toSorted(
+      (a, b) => Number(b.currentUserCanClaim) - Number(a.currentUserCanClaim),
+    );
 
   const loadMore = () => {
     setDisplayCount((prevCount) => Math.min(prevCount + 5, grants.length));
