@@ -38,6 +38,7 @@ export type Grant = {
   currentUserCanClaim: boolean;
   claimEvents?: ClaimHistoryEvent[];
   tokenReleasedInDays: number | null;
+  projectImage?: string;
 };
 
 type GrantsContextType = {
@@ -127,6 +128,8 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       return {
         id: grant.uuid,
         title: grant.title,
+        projectImage: grant.projectImage,
+        description: grant.description,
         proof,
         campaign,
         claimEvents,

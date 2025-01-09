@@ -3,7 +3,8 @@ export const dynamic = 'force-dynamic';
 export type GrantRow = {
   uuid: string;
   title: string;
-  description: string;
+  description?: string;
+  projectImage?: string;
 };
 
 export async function GET() {
@@ -67,8 +68,9 @@ export async function GET() {
       return {
         uuid: grant.uuid,
         title: grant.title,
-        description: grant.description || '<placeholder description>',
-      };
+        description: grant.description,
+        projectImage: grant.image,
+      } as GrantRow;
     });
   return Response.json({
     data: grants,
