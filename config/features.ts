@@ -31,6 +31,7 @@ interface Features {
   DELEGATION_REQUIRED: boolean;
   DELEGATION_ENABLED: boolean;
   DELEGATES_URL?: string;
+  GOOGLE_SHEETS_ID: string;
 }
 
 const featureMatrix: Record<WHITELABEL_ENV, Features> = {
@@ -43,6 +44,7 @@ const featureMatrix: Record<WHITELABEL_ENV, Features> = {
     DELEGATION_REQUIRED: false,
     DELEGATION_ENABLED: false,
     DELEGATES_URL: 'https://vote.optimism.io/delegates',
+    GOOGLE_SHEETS_ID: '1X7l16DvwZwnMiLdtK3jw5jMNbmInNvQPYD2_gHZE74c',
   },
   ZK_SYNC: {
     APP_NAME: 'ZKsync Claim Tool',
@@ -53,6 +55,7 @@ const featureMatrix: Record<WHITELABEL_ENV, Features> = {
     DELEGATION_REQUIRED: true,
     DELEGATION_ENABLED: true,
     DELEGATES_URL: 'https://vote.optimism.io/delegates',
+    GOOGLE_SHEETS_ID: '1X7l16DvwZwnMiLdtK3jw5jMNbmInNvQPYD2_gHZE74c',
   },
 };
 
