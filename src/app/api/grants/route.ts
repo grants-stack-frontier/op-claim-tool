@@ -7,6 +7,33 @@ export type GrantRow = {
   projectImage?: string;
 };
 
+const getUuidFromUrlOrUuid = (urlOrUuid: string) => {
+  // UUID v4 regex pattern
+  const uuidPattern =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+  // Check if input is already a UUID
+  if (uuidPattern.test(urlOrUuid)) {
+    return urlOrUuid;
+  }
+
+  try {
+    // Try to parse as URL and get last segment
+    const url = new URL(urlOrUuid);
+    const pathSegments = url.pathname.split('/').filter(Boolean);
+    const lastSegment = pathSegments[pathSegments.length - 1];
+
+    // Check if last segment is UUID
+    if (lastSegment && uuidPattern.test(lastSegment)) {
+      return lastSegment;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
+  return null;
+};
+
 export async function GET() {
   const apiKey = process.env.GOOGLE_SHEETS_API_KEY;
   const sheetId = process.env.GOOGLE_SHEETS_ID;
@@ -63,15 +90,15 @@ export async function GET() {
         {} as Record<string, string>,
       );
     })
-    .filter((grant) => grant.uuid)
     .map((grant) => {
       return {
-        uuid: grant.uuid,
+        uuid: getUuidFromUrlOrUuid(grant.uuid),
         title: grant.title,
         description: grant.description,
         projectImage: grant.image,
       } as GrantRow;
-    });
+    })
+    .filter((grant) => grant.uuid);
   return Response.json({
     data: grants,
     success: true,
