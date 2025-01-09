@@ -1,9 +1,9 @@
 export const dynamic = 'force-dynamic';
 
-export type GrantClaimRow = {
-  claimUid: string;
-  grantTitle: string;
-  grantDescription: string;
+export type GrantRow = {
+  uuid: string;
+  title: string;
+  description: string;
 };
 
 export async function GET() {
@@ -65,9 +65,9 @@ export async function GET() {
     .filter((grant) => grant.uuid)
     .map((grant) => {
       return {
-        claimUid: grant.uuid,
-        grantTitle: grant.title || '<placeholder title>',
-        grantDescription: grant.description || '<placeholder description>',
+        uuid: grant.uuid,
+        title: grant.title,
+        description: grant.description || '<placeholder description>',
       };
     });
   return Response.json({

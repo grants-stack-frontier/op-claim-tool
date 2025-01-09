@@ -66,7 +66,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
 
   const { grants } = useGetGrants();
   const { address } = useAccount();
-  const campaignIds = grants.map((grant) => grant.claimUid);
+  const campaignIds = grants.map((grant) => grant.uuid);
   const { data: hedgeyCampaigns, isLoading: isLoadingHedgeyCampaigns } =
     useGetHedgeyCampaigns(campaignIds);
   const { data: proofs, isLoading: isLoadingProofs } = useGetCanClaim(
@@ -90,9 +90,9 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
   const mappedGrants = grants
     .map((grant) => {
       const campaign = hedgeyCampaigns?.find(
-        (campaign) => campaign.id === grant.claimUid,
+        (campaign) => campaign.id === grant.uuid,
       );
-      const proof = proofs?.find((proof) => proof?.uuid === grant.claimUid);
+      const proof = proofs?.find((proof) => proof?.uuid === grant.uuid);
 
       if (!proof || !campaign) return null;
 
@@ -113,7 +113,7 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       const currentUserCanClaim = proof.canClaim && !proof.claimed;
       const date = new Date(campaign.createdAt as string);
       const chainId = getChainIdByNetworkName(campaign.network);
-      const claimEvents = claimHistory[grant.claimUid];
+      const claimEvents = claimHistory[grant.uuid];
       const latestDelegateTo = claimEvents?.find(
         (x) => !!x.delegatedTo,
       )?.delegatedTo;
@@ -125,8 +125,8 @@ export const GrantsProvider: React.FC<GrantsProviderProps> = ({ children }) => {
       )?.daysUntilNextRelease;
 
       return {
-        id: grant.claimUid,
-        title: grant.grantTitle,
+        id: grant.uuid,
+        title: grant.title,
         proof,
         campaign,
         claimEvents,
