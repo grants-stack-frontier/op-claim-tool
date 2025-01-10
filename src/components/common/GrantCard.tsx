@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import { RiArrowRightUpLine } from '@remixicon/react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { useAccount, useChainId, useChains, useSwitchChain } from 'wagmi';
+import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 import { ClaimDialog } from '../dialogs/ClaimDialog';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
